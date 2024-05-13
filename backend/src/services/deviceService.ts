@@ -6,10 +6,10 @@ import { espApiUrl } from '@/constants/espApiUrl'
 import { auth, mailoptions } from '@/constants/email'
 
 import LinkDeviceRequest from '@/models/requests/linkDeviceRequest'
-import DeviceModel, { IDevice } from '@/models/deviceModel'
 import SetDeviceRequest from '@/models/requests/setDeviceRequest'
 import SendSignalRequest from '@/models/requests/sendSignalRequest'
 import StatsResponse from '@/models/responses/statsResponse'
+import { IDevice, Device as DeviceModel, Sensor } from '@/models/entities'
 
 type DeviceList = IDevice[]
 
@@ -123,17 +123,20 @@ const getStats = async (deviceId: string) => {
     if (device != null) {
       const stats: AxiosResponse<StatsResponse> = await axios.get(`${espApiUrl}/stats?deviceId=${deviceId}&userId=test`)
 
-      device.envTemp = stats.data.temp
-      device.humidity = stats.data.humidity
+      const sensor = await Sensor.findOne({ espId: device.espId, roomId: device.roomId })
+      if (sensor != null) {
+        sensor.temp = stats.data.temp
+        sensor.humidity = stats.data.humidity
 
-      device.save()
+        sensor.save()
 
-      if (device.envTemp >= 32) await sendEmergencyMail(device.name)
+        if (sensor.temp >= 32) await sendEmergencyMail(device.name)
 
-      return {
-        humidity: stats.data.humidity,
-        temp: stats.data.temp,
-        deviceId: deviceId
+        return {
+          humidity: stats.data.humidity,
+          temp: stats.data.temp,
+          deviceId: deviceId
+        }
       }
     }
   } catch (error) {
