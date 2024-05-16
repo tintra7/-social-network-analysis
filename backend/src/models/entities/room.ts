@@ -1,14 +1,18 @@
 import mongoose from 'mongoose'
 
 export interface IRoom extends mongoose.Document {
+  name: string
   width: number
   height: number
   userId: mongoose.Types.ObjectId
   sensorId: mongoose.Types.ObjectId[]
 }
 
-const Schema = new mongoose.Schema(
+const Schema = new mongoose.Schema<IRoom>(
   {
+    name: {
+      type: String
+    },
     width: {
       type: Number,
       required: true

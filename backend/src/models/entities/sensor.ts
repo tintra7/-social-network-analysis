@@ -1,6 +1,12 @@
 import mongoose from 'mongoose'
 
-const Schema = new mongoose.Schema(
+interface ISensor extends mongoose.Document {
+  temp: number
+  humidity: number
+  espId: mongoose.Types.ObjectId
+}
+
+const Schema = new mongoose.Schema<ISensor>(
   {
     temp: {
       type: Number
@@ -19,4 +25,4 @@ const Schema = new mongoose.Schema(
   }
 )
 
-export const Sensor = mongoose.model('Sensor', Schema, 'sensor')
+export const Sensor = mongoose.model<ISensor>('Sensor', Schema, 'sensors')

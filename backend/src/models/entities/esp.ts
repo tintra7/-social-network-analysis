@@ -1,6 +1,10 @@
 import mongoose from 'mongoose'
 
-const Schema = new mongoose.Schema(
+interface IEsp extends mongoose.Document {
+  userId: mongoose.Types.ObjectId
+}
+
+const Schema = new mongoose.Schema<IEsp>(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -13,4 +17,4 @@ const Schema = new mongoose.Schema(
   }
 )
 
-export const Esp = mongoose.model('Esp', Schema, 'esps')
+export const Esp = mongoose.model<IEsp>('Esp', Schema, 'esps')

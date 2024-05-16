@@ -9,7 +9,7 @@ import LinkDeviceRequest from '@/models/requests/linkDeviceRequest'
 import SetDeviceRequest from '@/models/requests/setDeviceRequest'
 import SendSignalRequest from '@/models/requests/sendSignalRequest'
 import StatsResponse from '@/models/responses/statsResponse'
-import { IDevice, Device as DeviceModel, Sensor } from '@/models/entities'
+import { IDevice, Device as DeviceModel, Sensor, Room } from '@/models/entities'
 
 type DeviceList = IDevice[]
 
@@ -123,7 +123,8 @@ const getStats = async (deviceId: string) => {
     if (device != null) {
       const stats: AxiosResponse<StatsResponse> = await axios.get(`${espApiUrl}/stats?deviceId=${deviceId}&userId=test`)
 
-      const sensor = await Sensor.findOne({ espId: device.espId, roomId: device.roomId })
+      const room = await Room.findById(device.roomId)
+      const sensor = await Sensor.findOne({ roomId: room?._id })
       if (sensor != null) {
         sensor.temp = stats.data.temp
         sensor.humidity = stats.data.humidity
