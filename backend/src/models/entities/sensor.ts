@@ -8,10 +8,6 @@ const Schema = new mongoose.Schema(
     humidity: {
       type: Number
     },
-    roomId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Room'
-    },
     espId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Esp'

@@ -45,7 +45,7 @@ const powerDevice = async (req: Request, res: Response) => {
     const setDeviceRequest = <SetDeviceRequest>req.body
     setDeviceRequest.deviceId = req.params.id
     if (!isSetDeviceRequestValid(setDeviceRequest)) throw Error('Missing field(s)')
-      await deviceService.setDevice(setDeviceRequest)
+    await deviceService.setDevice(setDeviceRequest)
     res.json({ message: 'Successfully set device' })
   } catch (error) {
     if (error instanceof Error) res.status(400).send({ message: error.message })
@@ -58,7 +58,7 @@ const sendSignal = async (req: Request, res: Response) => {
     sendSignalRequest.deviceId = req.params.id
     if (!isSendSignalRequest(sendSignalRequest)) throw Error('Missing field(s)')
 
-      await deviceService.sendSignal(sendSignalRequest)
+    await deviceService.sendSignal(sendSignalRequest)
     res.json({ message: 'Successfully send signal' })
   } catch (error) {
     if (error instanceof Error) res.status(400).send({ message: error.message })
